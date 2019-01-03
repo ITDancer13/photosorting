@@ -22,10 +22,10 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="5" Name="PathTb" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" Text="{Binding MainViewModel.Directory}"/>
         <Button Grid.Row="0" Grid.Column="1" Margin="5" Click="SelectDir_OnClick">...</Button>
 
-        <userControls:ImageGridView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+        <userControls:ImageGridView DataContext="{Binding MainViewModel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
 
     </Grid>
 

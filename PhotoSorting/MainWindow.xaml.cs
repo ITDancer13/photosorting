@@ -11,6 +11,8 @@ namespace PhotoSorting
     /// </summary>
     public partial class MainWindow
     {
+        public MainViewModel MainViewModel { get; } = new MainViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,9 +23,9 @@ namespace PhotoSorting
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
 
-            PathTb.Text = dialog.SelectedPath;
+            MainViewModel.Directory= dialog.SelectedPath;
 
-            General.ImagesCollection.Clear();
+            MainViewModel.ClearImageFiles();
 
             var dlg = await this.ShowProgressAsync("Loading files", "Please wait...");
             dlg.SetIndeterminate();
@@ -31,7 +33,7 @@ namespace PhotoSorting
             var imageReader = new DirectoryImageReader(dialog.SelectedPath);
             var imageFiles = await imageReader.GetImageFilesAsync();
             foreach (var imageFile in imageFiles)
-                General.ImagesCollection.Add(imageFile);
+                MainViewModel.AddImageFile(imageFile);
 
             await dlg.CloseAsync();
         }
