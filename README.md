@@ -1,1 +1,1 @@
-# photosorting
+# Photo Raw and JPEG Sorting
