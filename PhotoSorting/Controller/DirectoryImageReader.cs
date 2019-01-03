@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PhotoSorting.Model;
 
@@ -27,11 +25,13 @@ namespace PhotoSorting.Controller
                 return Task.FromResult(_imageFiles);
 
             _imageFiles = new List<ImageFile>();
-            var files = Directory.GetFiles(_path).Where(p =>
-            {
-                var extension = Path.GetExtension(p).ToLower();
-                return JpegExtensions.Contains(extension) || RawExtensions.Contains(extension);
-            });
+            var files = Directory.GetFiles(_path)
+                .Where(p =>
+                {
+                    var extension = Path.GetExtension(p).ToLower();
+                    return JpegExtensions.Contains(extension) || RawExtensions.Contains(extension);
+                })
+                .OrderBy(p => p);
 
             var groupedFiles = files.GroupBy(Path.GetFileNameWithoutExtension);
 
