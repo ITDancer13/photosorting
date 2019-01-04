@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBox Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" Text="{Binding MainViewModel.Directory}"/>
-        <Button Grid.Row="0" Grid.Column="1" Margin="5" Click="SelectDir_OnClick">...</Button>
+        <Button Grid.Row="0" Grid.Column="1" Margin="5" Command="{Binding MainViewModel.SelectDirectoryCommand}">...</Button>
 
         <userControls:ImageGridView DataContext="{Binding MainViewModel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
 
