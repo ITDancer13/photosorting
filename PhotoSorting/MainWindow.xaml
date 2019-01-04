@@ -9,23 +9,27 @@
         xmlns:photoSorting="clr-namespace:PhotoSorting"
         mc:Ignorable="d"
         GlowBrush="{DynamicResource AccentColorBrush}"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        DataContext="{StaticResource MainViewModel}"
         BorderThickness="1"
         Title="RAW &amp; JPEG Photo Sorting" Height="450" Width="800">
+    <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" Text="{Binding MainViewModel.Directory}"/>
-        <Button Grid.Row="0" Grid.Column="1" Margin="5" Command="{Binding MainViewModel.SelectDirectoryCommand}">...</Button>
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" Text="{Binding Directory}"/>
+        <Button Grid.Row="0" Grid.Column="1" Margin="5" Command="{Binding SelectDirectoryCommand}">...</Button>
 
-        <userControls:ImageGridView DataContext="{Binding MainViewModel}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+        <userControls:ImageView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+
+        <userControls:SelectedImageFileInfoView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" />
 
     </Grid>
 

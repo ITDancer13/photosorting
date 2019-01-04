@@ -1,10 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:PhotoSorting.Model"
-                    xmlns:converter="clr-namespace:PhotoSorting.Converter">
-    <DataTemplate x:Key="ImageFileDataTemplate" DataType="local:ImageFile">
+                    xmlns:converter="clr-namespace:PhotoSorting.Converter"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+    <DataTemplate x:Key="ImageFileDataTemplate" DataType="local:ImageFileViewModel">
         <Border BorderBrush="{Binding BorderBrush}" BorderThickness="3" Margin="5">
             <Button>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="GotFocus" >
+                        <i:InvokeCommandAction Command="{Binding GotFocusCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="LostFocus" >
+                        <i:InvokeCommandAction Command="{Binding LostFocusCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <Button.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding SelectCommand}" />
                     <KeyBinding Key="Space" Command="{Binding SelectCommand}" />
@@ -39,19 +48,17 @@
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter Property="Opacity" Value="1" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding IsFocused}" Value="True">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                            </DataTrigger>
                         </Style.Triggers>
 
                     </Style>
                 </Button.Style>
                 <Grid>
-                    <Image>
-                        <Image.Source>
-                            <Binding Path="PreviewBitmapImage" />
-                        </Image.Source>
-                    </Image>
-                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Right">
-                        <TextBlock Visibility="{Binding SelectionModeTextVisibility}" Background="LightGray" FontSize="14" Foreground="Black" Padding="3,0,3,0" Margin="3" Text="{Binding SelectionModeText}" />
-                    </TextBlock>
+                    <Image Source="{Binding PreviewBitmapImage}" />
+                    
+                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Right"  Visibility="{Binding SelectionModeTextVisibility}" Background="LightGray" FontSize="14" Foreground="Black" Padding="3,0,3,0" Margin="3" Text="{Binding SelectionModeText}" />
                     <StackPanel Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <TextBlock Visibility="{Binding HasRawFileVisibility}" Background="LightGreen" FontSize="14" Foreground="Black" Padding="3,0,3,0" Margin="3">RAW</TextBlock>
                         <TextBlock Visibility="{Binding HasJpegFileVisibility}" Background="LightGray" FontSize="14" Foreground="Black" Padding="3,0,3,0" Margin="3">JPG</TextBlock>

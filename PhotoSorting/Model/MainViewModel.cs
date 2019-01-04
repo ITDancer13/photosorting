@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using PhotoSorting.Controller;
 
@@ -15,25 +11,27 @@ namespace PhotoSorting.Model
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly MetroWindow _metroWindow;
-        private readonly ObservableCollection<ImageFile> _imagesCollection = new ObservableCollection<ImageFile>();
-        public IEnumerable<ImageFile> ImagesCollection => _imagesCollection;
+        // private readonly MetroWindow _metroWindow;
+        private readonly ObservableCollection<ImageFileViewModel> _imagesCollection = new ObservableCollection<ImageFileViewModel>();
+        public IEnumerable<ImageFileViewModel> ImagesCollection => _imagesCollection;
         public string Directory { get; set; }
 
-        public int SelectedImageFiles => _imagesCollection.Count(p => p.SelectionMode != SelectionMode.None);
+        public int SelectedFilesCount => _imagesCollection.Sum(p => p.SelectedFilesCount);
+        public string SelectedFilesSizeMb => (_imagesCollection.Sum(p => p.SelectedFilesSize) / 1024.0 / 1024.0).ToString("f2");
 
-        public MainViewModel(MetroWindow metroWindow)
+        public ImageFileViewModel FocusedFileViewModel => _imagesCollection.FirstOrDefault(p => p.IsFocused);
+
+        public MainViewModel()
         {
-            _metroWindow = metroWindow;
             _imagesCollection.CollectionChanged += ImagesCollection_CollectionChanged;
         }
 
         private void ImagesCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedImageFiles)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImageFileViewModel.SelectionMode)));
         }
 
-        private void AddImageFile(ImageFile imageFile)
+        private void AddImageFile(ImageFileViewModel imageFile)
         {
             imageFile.PropertyChanged += ImageFile_PropertyChanged;
             _imagesCollection.Add(imageFile);
@@ -50,14 +48,14 @@ namespace PhotoSorting.Model
 
         private async void SelectDirectory()
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            var dialog = new FolderBrowserDialog();
+            if (dialog.ShowDialog() != DialogResult.OK) return;
 
             Directory = dialog.SelectedPath;
 
             ClearImageFiles();
 
-            var dlg = await _metroWindow.ShowProgressAsync("Loading files", "Please wait...");
+            var dlg = await MainWindow.Instance.ShowProgressAsync("Loading files", "Please wait...");
             dlg.SetIndeterminate();
 
             var imageReader = new DirectoryImageReader(dialog.SelectedPath);
@@ -66,6 +64,11 @@ namespace PhotoSorting.Model
                 AddImageFile(imageFile);
 
             await dlg.CloseAsync();
+
+            var first = _imagesCollection.FirstOrDefault();
+            if (first != null)
+                first.IsFocused = true;
+
         }
 
         private ICommand _selectDirectoryCommand;
@@ -73,6 +76,9 @@ namespace PhotoSorting.Model
         {
             get
             {
+                if (_selectDirectoryCommand != null)
+                    return _selectDirectoryCommand;
+
                 return _selectDirectoryCommand = new RelayCommand
                 {
                     CanExecutePredicate = p => true,
@@ -83,8 +89,16 @@ namespace PhotoSorting.Model
 
         private void ImageFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ImageFile.SelectionMode))
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedImageFiles)));
+            if (e.PropertyName == nameof(ImageFileViewModel.SelectionMode))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFilesCount)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFilesSizeMb)));
+            }
+
+            if (e.PropertyName == nameof(ImageFileViewModel.IsFocused))
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FocusedFileViewModel)));
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -11,12 +11,12 @@ namespace PhotoSorting
     /// </summary>
     public partial class MainWindow
     {
-        public MainViewModel MainViewModel { get; } 
+        public static MainWindow Instance { get; private set; }
 
         public MainWindow()
         {
-            MainViewModel = new MainViewModel(this);
             InitializeComponent();
+            Instance = this;
         }
     }
 }

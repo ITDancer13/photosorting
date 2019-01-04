@@ -92,7 +92,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ImageGridView.xaml">
+    <Page Include="UserControls\ImageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,8 +106,8 @@
     </Compile>
     <Compile Include="Controller\DirectoryImageReader.cs" />
     <Compile Include="Model\RelayCommand.cs" />
-    <Compile Include="UserControls\ImageGridView.xaml.cs">
-      <DependentUpon>ImageGridView.xaml</DependentUpon>
+    <Compile Include="UserControls\ImageView.xaml.cs">
+      <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BaseConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -120,7 +120,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ImageFile.cs" />
+    <Compile Include="Model\ImageFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

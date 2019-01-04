@@ -12,19 +12,19 @@ namespace PhotoSorting.Controller
         private static readonly string[] JpegExtensions = { ".jpg", ".jpeg" };
         private static readonly string[] RawExtensions = { ".cr2", ".nef" };
 
-        private List<ImageFile> _imageFiles;
+        private List<ImageFileViewModel> _imageFiles;
 
         public DirectoryImageReader(string path)
         {
             _path = path;
         }
 
-        public Task<List<ImageFile>> GetImageFilesAsync()
+        public Task<List<ImageFileViewModel>> GetImageFilesAsync()
         {
             if (_imageFiles != null)
                 return Task.FromResult(_imageFiles);
 
-            _imageFiles = new List<ImageFile>();
+            _imageFiles = new List<ImageFileViewModel>();
             var files = Directory.GetFiles(_path)
                 .Where(p =>
                 {
@@ -37,7 +37,7 @@ namespace PhotoSorting.Controller
 
             foreach (var groupedFile in groupedFiles)
             {
-                var imageFile = new ImageFile(groupedFile.FirstOrDefault(p => JpegExtensions.Contains(Path.GetExtension(p)?.ToLower())),
+                var imageFile = new ImageFileViewModel(groupedFile.FirstOrDefault(p => JpegExtensions.Contains(Path.GetExtension(p)?.ToLower())),
                     groupedFile.FirstOrDefault(p => RawExtensions.Contains(Path.GetExtension(p)?.ToLower())));
 
                 _imageFiles.Add(imageFile);
@@ -45,7 +45,7 @@ namespace PhotoSorting.Controller
 
             return Task.Run(() =>
             {
-                _imageFiles.AsParallel().ForAll(p => p.LoadPreviewBitmapImageInNonUiThread());
+                _imageFiles.AsParallel().ForAll(p => p.LoadInfos());
                 return _imageFiles;
             });
         }

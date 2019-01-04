@@ -10,11 +10,11 @@ using PhotoSorting.Model;
 namespace PhotoSorting.UserControls
 {
     /// <summary>
-    /// Interaktionslogik für ImageGridView.xaml
+    /// Interaktionslogik für ImageView.xaml
     /// </summary>
-    public partial class ImageGridView 
+    public partial class ImageView 
     {
-        public ImageGridView()
+        public ImageView()
         {
             InitializeComponent();
         }
