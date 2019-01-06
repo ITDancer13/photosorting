@@ -12,7 +12,6 @@
         DataContext="{StaticResource MainViewModel}"
         BorderThickness="1"
         Title="RAW &amp; JPEG Photo Sorting" Height="450" Width="800">
-    <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

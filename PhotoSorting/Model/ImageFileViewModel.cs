@@ -23,7 +23,6 @@ namespace PhotoSorting.Model
         public bool HasRawFile => !string.IsNullOrWhiteSpace(RawPath);
         public Visibility HasRawFileVisibility => HasRawFile ? Visibility.Visible : Visibility.Hidden;
 
-        public bool IsFocused { get; set; }
         public SelectionMode SelectionMode { get; private set; }
 
         public bool IsSelected => SelectionMode != SelectionMode.None;
@@ -88,7 +87,6 @@ namespace PhotoSorting.Model
                     CanExecutePredicate = p => true,
                     ExecuteAction = p =>
                     {
-                        IsFocused = true;
                         switch (SelectionMode)
                         {
                             case SelectionMode.None:
@@ -106,44 +104,6 @@ namespace PhotoSorting.Model
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
-                    }
-                };
-            }
-        }
-
-        private ICommand _gotFocusCommand;
-        public ICommand GotFocusCommand
-        {
-            get
-            {
-                if (_gotFocusCommand != null)
-                    return _gotFocusCommand;
-
-                return _gotFocusCommand = new RelayCommand
-                {
-                    CanExecutePredicate = p => true,
-                    ExecuteAction = p =>
-                    {
-                        IsFocused = true;
-                    }
-                };
-            }
-        }
-
-        private ICommand _lostFocusCommand;
-        public ICommand LostFocusCommand
-        {
-            get
-            {
-                if (_lostFocusCommand != null)
-                    return _lostFocusCommand;
-
-                return _lostFocusCommand = new RelayCommand
-                {
-                    CanExecutePredicate = p => true,
-                    ExecuteAction = p =>
-                    {
-                        IsFocused = false;
                     }
                 };
             }

@@ -19,8 +19,6 @@ namespace PhotoSorting.Model
         public int SelectedFilesCount => _imagesCollection.Sum(p => p.SelectedFilesCount);
         public string SelectedFilesSizeMb => (_imagesCollection.Sum(p => p.SelectedFilesSize) / 1024.0 / 1024.0).ToString("f2");
 
-        public ImageFileViewModel FocusedFileViewModel => _imagesCollection.FirstOrDefault(p => p.IsFocused);
-
         public MainViewModel()
         {
             _imagesCollection.CollectionChanged += ImagesCollection_CollectionChanged;
@@ -64,11 +62,6 @@ namespace PhotoSorting.Model
                 AddImageFile(imageFile);
 
             await dlg.CloseAsync();
-
-            var first = _imagesCollection.FirstOrDefault();
-            if (first != null)
-                first.IsFocused = true;
-
         }
 
         private ICommand _selectDirectoryCommand;
@@ -87,6 +80,8 @@ namespace PhotoSorting.Model
             }
         }
 
+        public ImageFileViewModel SelectedImage { get; set; }
+
         private void ImageFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ImageFileViewModel.SelectionMode))
@@ -94,15 +89,8 @@ namespace PhotoSorting.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFilesCount)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFilesSizeMb)));
             }
-
-            if (e.PropertyName == nameof(ImageFileViewModel.IsFocused))
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FocusedFileViewModel)));
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-
     }
 }

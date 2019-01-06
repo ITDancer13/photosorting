@@ -10,37 +10,27 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Image Source="{Binding FocusedFileViewModel.JpegImage}" />
+        <Image Source="{Binding SelectedImage.JpegImage}" />
 
-        <TextBlock Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding FocusedFileViewModel.SelectionModeTextVisibility}" Background="LightGray" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3" Text="{Binding FocusedFileViewModel.SelectionModeText}" />
+        <TextBlock Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding SelectedImage.SelectionModeTextVisibility}" Background="LightGray" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3" Text="{Binding SelectedImage.SelectionModeText}" />
         <StackPanel Grid.Row="0" Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBlock Visibility="{Binding FocusedFileViewModel.HasRawFileVisibility}" Background="LightGreen" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3">RAW</TextBlock>
-            <TextBlock Visibility="{Binding FocusedFileViewModel.HasJpegFileVisibility}" Background="LightGray" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3">JPG</TextBlock>
+            <TextBlock Visibility="{Binding SelectedImage.HasRawFileVisibility}" Background="LightGreen" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3">RAW</TextBlock>
+            <TextBlock Visibility="{Binding SelectedImage.HasJpegFileVisibility}" Background="LightGray" FontSize="24" Foreground="Black" Padding="3,0,3,0" Margin="3">JPG</TextBlock>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" Margin="0,10" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
-            <ItemsControl ItemsSource="{Binding ImagesCollection}" ItemTemplate="{StaticResource ImageFileDataTemplate}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-    </Grid>
-
-
-    <!-- View as Grid -->
-    <!--<ScrollViewer Margin="0,10">
-        <ItemsControl ItemsSource="{Binding ImagesCollection}" ItemTemplate="{StaticResource ImageFileDataTemplate}">
-            <ItemsControl.ItemsPanel>
+        <ListView Grid.Row="1" Margin="0,10"  ItemsSource="{Binding ImagesCollection}" ItemTemplate="{StaticResource ImageFileDataTemplate}" SelectedItem="{Binding SelectedImage}">
+            <ListView.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding SelectedImage.SelectCommand}" />
+                <KeyBinding Key="Space" Command="{Binding SelectedImage.SelectCommand}" />
+            </ListView.InputBindings>
+            <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="4"/>
+                    <StackPanel Orientation="Horizontal"></StackPanel>
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </ScrollViewer>-->
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
 </UserControl>
