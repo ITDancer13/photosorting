@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              DataContext="{StaticResource MainViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="800">
-    <StackPanel Orientation="Horizontal">
+             d:DesignHeight="800" d:DesignWidth="300">
+    <StackPanel Orientation="Vertical">
         <TextBlock Margin="5" Text="{Binding SelectedFilesCount, StringFormat=' {0} selected files'}" />
         <TextBlock Margin="5" Text="{Binding SelectedFilesSizeMb, StringFormat=' {0} MB selected'}" />
     </StackPanel>
