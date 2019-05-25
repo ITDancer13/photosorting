@@ -9,7 +9,7 @@
         GlowBrush="{DynamicResource AccentColorBrush}"
         DataContext="{StaticResource MainViewModel}"
         BorderThickness="1"
-        Title="RAW &amp; JPEG Photo Sorting" Height="1000" Width="1980">
+        Title="RAW &amp; JPEG Photo Sorting" Height="1000" Width="1980" Loaded="MainWindow_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

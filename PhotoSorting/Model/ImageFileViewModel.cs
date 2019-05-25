@@ -9,12 +9,10 @@ using System.Windows.Media.Imaging;
 
 namespace PhotoSorting.Model
 {
-    public enum SelectionMode { None, Raw, Jpeg, RawAndJpeg }
-
     public class ImageFileViewModel : DependencyObject, INotifyPropertyChanged
     {
         private static readonly SolidColorBrush TransparentBorderBrush = new SolidColorBrush(Colors.Transparent);
-        private static readonly SolidColorBrush GreenBorderBrush = new SolidColorBrush(Colors.YellowGreen);
+        private static readonly SolidColorBrush YellowBorderBrush = new SolidColorBrush(Colors.Yellow);
         private static readonly SolidColorBrush GrayBorderBrush = new SolidColorBrush(Colors.Gray);
         private static readonly SolidColorBrush RedBorderBrush = new SolidColorBrush(Colors.Red);
 
@@ -56,7 +54,7 @@ namespace PhotoSorting.Model
                     case SelectionMode.None:
                         return TransparentBorderBrush;
                     case SelectionMode.Raw:
-                        return GreenBorderBrush;
+                        return YellowBorderBrush;
                     case SelectionMode.RawAndJpeg:
                         return RedBorderBrush;
                     case SelectionMode.Jpeg:

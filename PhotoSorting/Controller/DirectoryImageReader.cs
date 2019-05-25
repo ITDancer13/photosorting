@@ -37,8 +37,10 @@ namespace PhotoSorting.Controller
 
             foreach (var groupedFile in groupedFiles)
             {
-                var imageFile = new ImageFileViewModel(groupedFile.FirstOrDefault(p => JpegExtensions.Contains(Path.GetExtension(p)?.ToLower())),
-                    groupedFile.FirstOrDefault(p => RawExtensions.Contains(Path.GetExtension(p)?.ToLower())));
+                var jpegFilepath = groupedFile.FirstOrDefault(p => JpegExtensions.Contains(Path.GetExtension(p)?.ToLower()));
+                var rawFilepath = groupedFile.FirstOrDefault(p => RawExtensions.Contains(Path.GetExtension(p)?.ToLower()));
+
+                var imageFile = new ImageFileViewModel(jpegFilepath, rawFilepath);
 
                 _imageFiles.Add(imageFile);
             }
