@@ -94,8 +94,8 @@
     <Compile Include="UserControls\PreviewListView.xaml.cs">
       <DependentUpon>PreviewListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SelectedImageFileInfoView.xaml.cs">
-      <DependentUpon>SelectedImageFileInfoView.xaml</DependentUpon>
+    <Compile Include="UserControls\SelectedImagesFileInfoView.xaml.cs">
+      <DependentUpon>SelectedImagesFileInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="Model\ImageFileDataTemplate.xaml">
       <SubType>Designer</SubType>
@@ -122,7 +122,6 @@
     <Compile Include="UserControls\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converter\BaseConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -135,7 +134,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\SelectedImageFileInfoView.xaml">
+    <Page Include="UserControls\SelectedImagesFileInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

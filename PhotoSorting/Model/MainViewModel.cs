@@ -84,6 +84,7 @@ namespace PhotoSorting.Model
 
         private void ImageFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            // ReSharper disable once InvertIf
             if (e.PropertyName == nameof(ImageFileViewModel.SelectionMode))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFilesCount)));
