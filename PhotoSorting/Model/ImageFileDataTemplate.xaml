@@ -4,7 +4,7 @@
     <DataTemplate x:Key="ImageFileDataTemplate" DataType="local:ImageFileViewModel">
         <Border BorderBrush="{Binding BorderBrush}" BorderThickness="3" Margin="5">
             <Grid>
-                <Image Source="{Binding PreviewBitmapImage}" />
+                <Image Source="{Binding PreviewBitmapImage}" Width="200" />
 
                 <TextBlock VerticalAlignment="Top" HorizontalAlignment="Right"  Visibility="{Binding SelectionModeTextVisibility}" Background="LightGray" FontSize="14" Foreground="Black" Padding="3,0,3,0" Margin="3" Text="{Binding SelectionModeText}" />
                 <StackPanel Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
