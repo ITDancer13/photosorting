@@ -9,5 +9,6 @@
     <StackPanel Orientation="Vertical">
         <TextBlock Margin="5" Text="{Binding SelectedFilesCount, StringFormat=' {0} selected files'}" />
         <TextBlock Margin="5" Text="{Binding SelectedFilesSizeMb, StringFormat=' {0} MB selected'}" />
+        <Button Margin="5" Command="{Binding MoveSelectedFiles}">move selected files</Button>
     </StackPanel>
 </UserControl>

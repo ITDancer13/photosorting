@@ -183,7 +183,7 @@ namespace PhotoSorting.Model
         private void SetRotation(Rotation rotation)
         {
             _previewBitmapImage = null;
-            _jpegImage = null;
+            //_jpegImage = null;
             _imageRotation = rotation;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviewBitmapImage)));
@@ -273,22 +273,20 @@ namespace PhotoSorting.Model
             PreviewBitmapImage.CheckAccess();
         }
 
-        private BitmapImage _jpegImage;
         public BitmapImage JpegImage
         {
             get
             {
-                if (_jpegImage != null)
-                    return _jpegImage;
+                var jpegImage = new BitmapImage();
+                jpegImage.BeginInit();
+                jpegImage.CacheOption = BitmapCacheOption.OnLoad;
+                jpegImage.DecodePixelWidth = 1920;
+                jpegImage.Rotation = _imageRotation;
+                jpegImage.UriSource = new Uri(JpegPath);
+                jpegImage.EndInit();
+                jpegImage.Freeze();
 
-                _jpegImage = new BitmapImage();
-                _jpegImage.BeginInit();
-                _jpegImage.DecodePixelWidth = 1920;
-                _jpegImage.UriSource = new Uri(JpegPath);
-                _jpegImage.Rotation = _imageRotation;
-                _jpegImage.EndInit();
-
-                return _jpegImage;
+                return jpegImage;
             }
         }
 

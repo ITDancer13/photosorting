@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -110,6 +111,45 @@ namespace PhotoSorting.Model
         }
 
         public ImageFileViewModel SelectedImage { get; set; }
+
+        private ICommand _moveSelectedFiles;
+        public ICommand MoveSelectedFiles
+        {
+            get
+            {
+                if (_moveSelectedFiles != null)
+                    return _moveSelectedFiles;
+
+                return _moveSelectedFiles = new RelayCommand
+                {
+                    CanExecutePredicate = p => true,
+                    ExecuteAction = p =>
+                    {
+                        var dialog = new FolderBrowserDialog { SelectedPath = Directory, Description = @"Select target folder" };
+                        if (dialog.ShowDialog() != DialogResult.OK)
+                            return;
+
+                        var jpegs = ImagesCollection.Where(i => i.SelectionMode == SelectionMode.Jpeg || i.SelectionMode == SelectionMode.RawAndJpeg).Select(i => i.JpegPath);
+                        var raws = ImagesCollection.Where(i => i.SelectionMode == SelectionMode.Raw || i.SelectionMode == SelectionMode.RawAndJpeg).Select(i => i.RawPath);
+                        var files = jpegs.Concat(raws).OrderBy(f => f).ToList();
+
+                        foreach (var file in files)
+                        {
+                            var filename = Path.GetFileName(file);
+                            if(string.IsNullOrEmpty(filename))
+                                continue;
+
+                            var dest = System.IO.Path.Combine(dialog.SelectedPath, filename);
+                            File.Move(file, dest);
+                        }
+
+                        LoadDirectory(Directory);
+                    }
+                };
+            }
+        }
+
+
 
         private void ImageFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
