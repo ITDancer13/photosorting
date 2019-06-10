@@ -59,7 +59,7 @@ namespace PhotoSorting.Model
 
         private async Task SelectDirectory()
         {
-            var dialog = new FolderBrowserDialog();
+            var dialog = new FolderBrowserDialog { SelectedPath = Directory };
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -74,6 +74,9 @@ namespace PhotoSorting.Model
 
         private async Task LoadDirectory(string path)
         {
+            if (string.IsNullOrEmpty(path) || !System.IO.Directory.Exists(path))
+                return;
+
             Directory = path;
 
             ClearImageFiles();

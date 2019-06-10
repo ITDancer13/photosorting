@@ -71,7 +71,6 @@ namespace PhotoSorting.Model
         private FileInfo JpegFileInfo { get; }
         private FileInfo RawFileInfo { get; }
 
-        public BitmapImage PreviewBitmapImage { get; private set; }
 
         private ICommand _selectCommand;
         public ICommand SelectCommand
@@ -106,6 +105,89 @@ namespace PhotoSorting.Model
                     }
                 };
             }
+        }
+
+        private Rotation _imageRotation = Rotation.Rotate0;
+
+        private ICommand _rotateCommand;
+        public ICommand RotateCommand
+        {
+            get
+            {
+                if (_rotateCommand != null)
+                    return _rotateCommand;
+
+                return _rotateCommand = new RelayCommand
+                {
+                    CanExecutePredicate = p => true,
+                    ExecuteAction = p =>
+                    {
+                        switch (_imageRotation)
+                        {
+                            case Rotation.Rotate0:
+                                SetRotation(Rotation.Rotate90);
+                                break;
+                            case Rotation.Rotate90:
+                                SetRotation(Rotation.Rotate180);
+                                break;
+                            case Rotation.Rotate180:
+                                SetRotation(Rotation.Rotate270);
+                                break;
+                            case Rotation.Rotate270:
+                                SetRotation(Rotation.Rotate0);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    }
+                };
+            }
+        }
+
+        private ICommand _rotateAnticlockwiseCommand;
+        public ICommand RotateAnticlockwiseCommand
+        {
+            get
+            {
+                if (_rotateAnticlockwiseCommand != null)
+                    return _rotateAnticlockwiseCommand;
+
+                return _rotateAnticlockwiseCommand = new RelayCommand
+                {
+                    CanExecutePredicate = p => true,
+                    ExecuteAction = p =>
+                    {
+                        switch (_imageRotation)
+                        {
+                            case Rotation.Rotate0:
+                                SetRotation(Rotation.Rotate270);
+                                break;
+                            case Rotation.Rotate90:
+                                SetRotation(Rotation.Rotate0);
+                                break;
+                            case Rotation.Rotate180:
+                                SetRotation(Rotation.Rotate90);
+                                break;
+                            case Rotation.Rotate270:
+                                SetRotation(Rotation.Rotate180);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    }
+                };
+            }
+        }
+        private void SetRotation(Rotation rotation)
+        {
+            _previewBitmapImage = null;
+            _jpegImage = null;
+            _imageRotation = rotation;
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PreviewBitmapImage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JpegImage)));
         }
 
         public int SelectedFilesCount
@@ -161,31 +243,52 @@ namespace PhotoSorting.Model
 
         }
 
-        public void LoadInfos()
+        private BitmapImage _previewBitmapImage;
+
+        public BitmapImage PreviewBitmapImage
         {
+            get
+            {
+                if (_previewBitmapImage != null)
+                    return _previewBitmapImage;
 
-            if (JpegPath == null) return;
+                _previewBitmapImage = new BitmapImage();
+                _previewBitmapImage.BeginInit();
+                _previewBitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                _previewBitmapImage.DecodePixelWidth = 500;
+                _previewBitmapImage.Rotation = _imageRotation;
+                _previewBitmapImage.UriSource = new Uri(JpegPath);
+                _previewBitmapImage.EndInit();
+                _previewBitmapImage.Freeze();
 
-            PreviewBitmapImage = new BitmapImage();
-            PreviewBitmapImage.BeginInit();
-            PreviewBitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            PreviewBitmapImage.DecodePixelWidth = 500;
-            PreviewBitmapImage.UriSource = new Uri(JpegPath);
-            PreviewBitmapImage.EndInit();
-            PreviewBitmapImage.Freeze();
+                return _previewBitmapImage;
+            }
         }
 
+        public void InitializePreviewImage()
+        {
+            if (JpegPath == null) return;
+
+            // Workaround: Call any method to load...
+            PreviewBitmapImage.CheckAccess();
+        }
+
+        private BitmapImage _jpegImage;
         public BitmapImage JpegImage
         {
             get
             {
-                var img = new BitmapImage();
-                img.BeginInit();
-                img.DecodePixelWidth = 1920;
-                img.UriSource = new Uri(JpegPath);
-                img.EndInit();
+                if (_jpegImage != null)
+                    return _jpegImage;
 
-                return img;
+                _jpegImage = new BitmapImage();
+                _jpegImage.BeginInit();
+                _jpegImage.DecodePixelWidth = 1920;
+                _jpegImage.UriSource = new Uri(JpegPath);
+                _jpegImage.Rotation = _imageRotation;
+                _jpegImage.EndInit();
+
+                return _jpegImage;
             }
         }
 

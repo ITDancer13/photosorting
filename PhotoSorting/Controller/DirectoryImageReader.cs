@@ -47,7 +47,7 @@ namespace PhotoSorting.Controller
 
             return Task.Run(() =>
             {
-                _imageFiles.AsParallel().ForAll(p => p.LoadInfos());
+                _imageFiles.AsParallel().ForAll(p => p.InitializePreviewImage());
                 return _imageFiles;
             });
         }

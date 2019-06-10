@@ -191,6 +191,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\MultiplyConverter.cs" />
     <Compile Include="Entities\DatabaseContext.cs" />
     <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\Settings.cs" />
