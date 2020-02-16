@@ -10,7 +10,7 @@ namespace PhotoSorting.Controller
     {
         private readonly string _path;
         private static readonly string[] JpegExtensions = { ".jpg", ".jpeg" };
-        private static readonly string[] RawExtensions = { ".cr2", ".nef" };
+        private static readonly string[] RawExtensions = { ".cr2", ".nef", "cr3" };
 
         private List<ImageFileViewModel> _imageFiles;
 
